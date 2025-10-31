@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>重返时光 | Return To Time - AI影像修复与心灵疗愈</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* 奢华深色主题配色 */
+            --color-bg: #0a0a0f;
+            --color-surface: #13131a;
+            --color-elevated: #1a1a24;
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #a0a0b0;
+            --color-border: rgba(255, 255, 255, 0.08);
+            --color-border-bright: rgba(255, 255, 255, 0.15);
+            
+            /* 奢华渐变系统 */
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-gold: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            --gradient-luxury: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --gradient-neon: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-cyber: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            
+            /* 发光效果 */
+            --glow-primary: 0 0 20px rgba(102, 126, 234, 0.5), 0 0 40px rgba(102, 126, 234, 0.3);
+            --glow-gold: 0 0 20px rgba(255, 216, 155, 0.5), 0 0 40px rgba(255, 216, 155, 0.3);
+            
+            /* 渐变背景网格 */
+            --bg-grid: repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, transparent 1px, transparent 40px),
+                       repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, transparent 1px, transparent 40px);
+            --gradient-mesh: radial-gradient(ellipse at top, rgba(102, 126, 234, 0.15), transparent 50%),
+                             radial-gradient(ellipse at bottom, rgba(118, 75, 162, 0.15), transparent 50%);
+            
+            /* 字体系统 */
+            --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+            --font-display: 'Playfair Display', serif;
+            
+            /* 间距系统 */
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 24px;
+            --spacing-lg: 48px;
+            --spacing-xl: 80px;
+            --spacing-2xl: 120px;
+            
+            /* 圆角 */
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+        }
+
+        body {
+            font-family: var(--font-system);
+            background: var(--color-bg);
+            background-image: var(--bg-grid), var(--gradient-mesh);
+            color: var(--color-text-primary);
+            overflow-x: hidden;
+            line-height: 1.47059;
+            font-size: 17px;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 奢华深色导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            padding: 0;
+            height: 44px;
+            border-bottom: 1px solid var(--color-border-bright);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.28, 0.11, 0.32, 1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 15, 0.85);
+            box-shadow: 0 8px 40px rgba(102, 126, 234, 0.15);
+        }
+
+        .nav-content {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 21px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            letter-spacing: -0.5px;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo:hover {
+            opacity: 0.7;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--color-text-primary);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            transition: opacity 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        /* 高级Hero区 */
+        .hero {
+            min-height: calc(100vh - 44px);
+            margin-top: 44px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: var(--color-bg);
+            padding: var(--spacing-2xl) var(--spacing-md);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-mesh);
+            pointer-events: none;
+            animation: meshMove 20s ease-in-out infinite;
+        }
+
+        @keyframes meshMove {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        .particles {
+            display: none; /* Apple风格不需要粒子 */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .hero-title {
+            font-family: var(--font-system);
+            font-size: clamp(56px, 8vw, 108px);
+            font-weight: 800;
+            line-height: 1.0834933333;
+            letter-spacing: -0.025em;
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, #ffffff 0%, #a0a0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 80px rgba(102, 126, 234, 0.5);
+            position: relative;
+            animation: titleGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.3)); }
+            50% { filter: drop-shadow(0 0 40px rgba(102, 126, 234, 0.6)) drop-shadow(0 0 60px rgba(118, 75, 162, 0.4)); }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(28px, 4vw, 56px);
+            font-weight: 600;
+            line-height: 1.0714285714;
+            letter-spacing: -0.005em;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .hero-description {
+            font-size: clamp(19px, 2.5vw, 24px);
+            line-height: 1.381002381;
+            font-weight: 400;
+            letter-spacing: 0.011em;
+            color: var(--color-text-secondary);
+            margin: 0 auto var(--spacing-lg);
+            max-width: 680px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: var(--spacing-lg);
+        }
+
+        /* 高级按钮设计 */
+        .btn {
+            font-family: var(--font-system);
+            font-size: 17px;
+            line-height: 1.17648;
+            font-weight: 500;
+            letter-spacing: -0.022em;
+            padding: 14px 32px;
+            border-radius: 980px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            min-width: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: #ffffff;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3),
+                        0 4px 12px rgba(118, 75, 162, 0.2),
+                        inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4),
+                        0 6px 16px rgba(118, 75, 162, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gradient-primary);
+            color: #ffffff;
+            border-color: transparent;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Apple 风格 Section */
+        section {
+            padding: var(--spacing-2xl) var(--spacing-md);
+            position: relative;
+            background: var(--color-bg);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(40px, 5vw, 64px);
+            font-weight: 700;
+            line-height: 1.0625;
+            letter-spacing: -0.009em;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: clamp(19px, 2.5vw, 24px);
+            line-height: 1.381002381;
+            font-weight: 400;
+            letter-spacing: 0.011em;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-xl);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .healing {
+            background: var(--color-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .healing::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(168, 237, 234, 0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .features {
+            background: var(--color-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(ellipse at center, rgba(102, 126, 234, 0.15) 0%, transparent 50%);
+            animation: spotlight 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes spotlight {
+            0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+            50% { transform: translateX(-50%) translateY(-10%); opacity: 1; }
+        }
+
+        .features::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.5), transparent);
+        }
+
+        .features-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        /* 3D交互式高级卡片 */
+        .feature-card {
+            background: rgba(26, 26, 36, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* 光效层 */
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(102, 126, 234, 0.15), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-lg);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover::after {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            background: rgba(26, 26, 36, 0.8);
+            box-shadow: 0 24px 80px rgba(102, 126, 234, 0.3),
+                        0 12px 40px rgba(0, 0, 0, 0.6),
+                        var(--glow-primary);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .feature-icon {
+            width: 72px;
+            height: 72px;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            color: #ffffff;
+            font-size: 36px;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                        0 8px 32px rgba(102, 126, 234, 0.4),
+                        var(--glow-primary);
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 8px 32px rgba(102, 126, 234, 0.4), var(--glow-primary); }
+            50% { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 8px 32px rgba(102, 126, 234, 0.6), 0 0 30px rgba(102, 126, 234, 0.7), 0 0 50px rgba(102, 126, 234, 0.5); }
+        }
+
+        .feature-icon::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: var(--radius-md);
+            padding: 2px;
+            background: linear-gradient(135deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 200%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            animation: borderRotate 3s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes borderRotate {
+            to { background-position: 200% center; }
+        }
+
+        .feature-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 50%);
+            border-radius: var(--radius-md);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: translateY(-8px) scale(1.15);
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+                        0 20px 60px rgba(102, 126, 234, 0.6),
+                        0 0 40px rgba(102, 126, 234, 0.8),
+                        0 0 60px rgba(102, 126, 234, 0.6);
+            animation: none;
+        }
+
+        .price-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 980px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #667eea;
+            margin-top: auto;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .price-badge {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            transform: scale(1.05);
+        }
+
+        .feature-title {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.16667;
+            letter-spacing: 0.009em;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-description {
+            font-size: 17px;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-md);
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        /* 功能分类标签 */
+        .feature-category {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--color-text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: var(--spacing-sm);
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-btn {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 400;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: gap 0.3s ease;
+        }
+
+        .feature-btn:hover {
+            gap: 8px;
+        }
+
+        /* Apple 风格疗愈空间 */
+        .healing {
+            background: var(--color-surface);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .healing-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+            align-items: center;
+        }
+
+        .healing-text h3 {
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 700;
+            line-height: 1.0834933333;
+            letter-spacing: -0.003em;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text-primary);
+        }
+
+        .healing-text p {
+            font-size: 21px;
+            line-height: 1.381002381;
+            font-weight: 400;
+            letter-spacing: 0.011em;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .healing-features {
+            list-style: none;
+            margin: var(--spacing-lg) 0;
+        }
+
+        .healing-features li {
+            padding: var(--spacing-sm) 0;
+            padding-left: var(--spacing-lg);
+            position: relative;
+            color: var(--color-text-primary);
+            font-size: 17px;
+            line-height: 1.47059;
+        }
+
+        .healing-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--color-accent);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .healing-visual {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid var(--color-border-bright);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            position: relative;
+            overflow: hidden;
+            min-height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 140px;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.25),
+                        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+                        var(--glow-primary);
+        }
+
+        /* 渐变背景旋转 */
+        .healing-visual::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg at 50% 50%, 
+                        rgba(102, 126, 234, 0.2) 0deg, 
+                        rgba(168, 237, 234, 0.2) 120deg, 
+                        rgba(254, 214, 227, 0.2) 240deg, 
+                        rgba(102, 126, 234, 0.2) 360deg);
+            animation: rotate 25s linear infinite;
+        }
+
+        /* 光晕效果 */
+        .healing-visual::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: var(--radius-xl);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.4), rgba(118, 75, 162, 0.4));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            padding: 2px;
+            animation: borderPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes borderPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Apple 风格用户故事 */
+        .stories {
+            background: var(--color-bg);
+        }
+
+        .stories-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .story-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .story-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        .story-image {
+            width: 100%;
+            height: 220px;
+            background: var(--gradient-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 90px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+        }
+
+        .story-content {
+            padding: var(--spacing-lg);
+        }
+
+        .story-quote {
+            font-size: 17px;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .story-author {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* Apple 风格页脚 */
+        .footer {
+            background: var(--color-surface);
+            padding: var(--spacing-xl) var(--spacing-md);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .footer-section h4 {
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-md);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-section p, .footer-section a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-size: 12px;
+            line-height: 1.33337;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--color-text-primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            font-size: 12px;
+        }
+
+        /* Apple 风格Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.48);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            max-width: 720px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 32px 100px rgba(102, 126, 234, 0.25),
+                        0 16px 50px rgba(0, 0, 0, 0.15),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
+            font-size: 28px;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            background: var(--color-surface);
+        }
+
+        .modal-close:hover {
+            background: var(--color-border);
+        }
+
+        .modal-title {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.125;
+            letter-spacing: -0.003em;
+            background: linear-gradient(135deg, #ffffff 0%, #a0a0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--spacing-md);
+            position: relative;
+        }
+
+        .modal-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
+
+        .modal-subtitle {
+            color: var(--color-text-secondary);
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: var(--spacing-xl);
+            padding-left: 16px;
+            border-left: 3px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: var(--color-surface);
+        }
+
+        .upload-area:hover {
+            border-color: var(--color-accent);
+            background: rgba(0, 113, 227, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 64px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .chat-container {
+            position: relative;
+            border: 1px solid var(--color-border-bright);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            height: 450px;
+            overflow-y: auto;
+            margin-bottom: var(--spacing-lg);
+            background: linear-gradient(135deg, rgba(26, 26, 36, 0.95) 0%, rgba(19, 19, 26, 0.95) 100%);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+                        0 8px 32px rgba(102, 126, 234, 0.15);
+        }
+
+        /* 聊天容器背景网格 */
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 20px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 20px);
+            pointer-events: none;
+            border-radius: var(--radius-xl);
+        }
+
+        /* 滚动条优化 */
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.4);
+            border-radius: 10px;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.6);
+        }
+
+        .chat-message {
+            margin-bottom: var(--spacing-md);
+            padding: 16px 20px;
+            border-radius: var(--radius-lg);
+            max-width: 75%;
+            animation: messageSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+            font-size: 16px;
+            line-height: 1.6;
+            letter-spacing: 0.01em;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 用户消息 */
+        .chat-message.user {
+            background: var(--gradient-primary);
+            color: #ffffff;
+            margin-left: auto;
+            text-align: right;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3),
+                        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-message.user::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+            border-radius: var(--radius-lg);
+            pointer-events: none;
+        }
+
+        /* AI消息 */
+        .chat-message.ai {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--color-text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2),
+                        0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+        }
+
+        .chat-message.ai::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 980px;
+            color: var(--color-text-primary);
+            font-size: 16px;
+            font-family: var(--font-system);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2),
+                        0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+        }
+
+        .chat-input::placeholder {
+            color: var(--color-text-secondary);
+            opacity: 0.6;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: rgba(102, 126, 234, 0.6);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2),
+                        0 0 0 1px rgba(102, 126, 234, 0.3) inset,
+                        var(--glow-primary);
+            transform: translateY(-2px);
+        }
+
+        .send-btn {
+            padding: 16px 32px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 980px;
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3),
+                        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            min-width: 100px;
+        }
+
+        .send-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+            border-radius: 980px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.5),
+                        0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+                        var(--glow-primary);
+        }
+
+        .send-btn:hover::before {
+            opacity: 1;
+        }
+
+        .send-btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        /* 支付Modal样式 */
+        .payment-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .payment-option {
+            background: rgba(26, 26, 36, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .payment-option:hover {
+            border-color: rgba(102, 126, 234, 0.6);
+            background: rgba(26, 26, 36, 0.8);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3),
+                        var(--glow-primary);
+        }
+
+        .payment-option.selected {
+            border-color: rgba(102, 126, 234, 0.8);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4),
+                        0 0 0 1px rgba(102, 126, 234, 0.3) inset,
+                        var(--glow-primary);
+        }
+
+        .payment-option .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff3b30;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .plan-name {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .plan-price {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .plan-price small {
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .plan-duration {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        .qr-code-container {
+            display: none;
+            text-align: center;
+            padding: var(--spacing-lg) 0;
+        }
+
+        .qr-code-container.active {
+            display: block;
+        }
+
+        .qr-code {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto var(--spacing-md);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 245, 250, 0.95) 100%);
+            font-size: 90px;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3),
+                        0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+                        var(--glow-primary);
+            position: relative;
+        }
+
+        .qr-code::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            padding: 3px;
+            animation: borderPulse 3s ease-in-out infinite;
+        }
+
+        .qr-hint {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .payment-method-tabs {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            justify-content: center;
+        }
+
+        .payment-tab {
+            padding: 10px 24px;
+            border: 1px solid var(--color-border);
+            border-radius: 980px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: rgba(26, 26, 36, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--color-text-secondary);
+        }
+
+        .payment-tab:hover {
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(26, 26, 36, 0.8);
+            color: var(--color-text-primary);
+            transform: translateY(-2px);
+        }
+
+        .payment-tab.active {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4),
+                        var(--glow-primary);
+        }
+
+        /* 奢华移动端响应式 */
+        @media (max-width: 1024px) {
+            .healing-content {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-lg);
+            }
+            
+            .nav-links {
+                gap: 20px;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* 导航栏 */
+            .navbar {
+                height: 52px;
+            }
+            
+            .nav-content {
+                padding: 0 16px;
+            }
+            
+            .logo {
+                font-size: 18px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            /* Hero区 */
+            .hero {
+                margin-top: 52px;
+                padding: var(--spacing-lg) var(--spacing-sm);
+                min-height: calc(100vh - 52px);
+            }
+            
+            .hero-title {
+                font-size: clamp(36px, 10vw, 56px);
+                margin-bottom: 12px;
+            }
+            
+            .hero-subtitle {
+                font-size: clamp(20px, 5vw, 32px);
+                margin-bottom: 16px;
+            }
+            
+            .hero-description {
+                font-size: 16px;
+                margin-bottom: var(--spacing-md);
+            }
+            
+            /* 按钮 */
+            .cta-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 12px 24px;
+                font-size: 16px;
+            }
+            
+            /* Section */
+            section {
+                padding: var(--spacing-lg) var(--spacing-sm);
+            }
+            
+            .section-title {
+                font-size: clamp(32px, 8vw, 48px);
+            }
+            
+            .section-subtitle {
+                font-size: 16px;
+                margin-bottom: var(--spacing-lg);
+            }
+            
+            /* 功能卡片 */
+            .features-grid,
+            .stories-container {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm);
+            }
+            
+            .feature-card {
+                padding: var(--spacing-md);
+            }
+            
+            .feature-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 28px;
+                /* 移动端减少动画以提升性能 */
+                animation: none;
+            }
+            
+            .feature-icon::before {
+                animation: none;
+            }
+            
+            .feature-card:hover .feature-icon {
+                transform: translateY(-4px) scale(1.1);
+            }
+            
+            .feature-title {
+                font-size: 20px;
+            }
+            
+            .feature-description {
+                font-size: 15px;
+            }
+            
+            .price-badge {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+            
+            /* Healing区 */
+            .healing-text h3 {
+                font-size: clamp(28px, 7vw, 40px);
+            }
+            
+            .healing-text p {
+                font-size: 16px;
+            }
+            
+            .healing-features li {
+                font-size: 15px;
+            }
+            
+            .healing-visual {
+                min-height: 300px;
+                font-size: 80px;
+            }
+            
+            /* Stories */
+            .story-image {
+                height: 180px;
+                font-size: 60px;
+            }
+            
+            .story-content {
+                padding: var(--spacing-md);
+            }
+            
+            .story-quote {
+                font-size: 15px;
+            }
+            
+            /* Modal */
+            .modal-content {
+                width: 95%;
+                padding: var(--spacing-md);
+                max-height: 90vh;
+            }
+            
+            .modal-title {
+                font-size: 24px;
+                margin-bottom: var(--spacing-md);
+            }
+            
+            .modal-close {
+                width: 32px;
+                height: 32px;
+                font-size: 24px;
+            }
+            
+            /* 支付选项 */
+            .payment-options {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .payment-option {
+                padding: var(--spacing-md);
+            }
+            
+            .plan-price {
+                font-size: 32px;
+            }
+            
+            /* 聊天 */
+            .chat-container {
+                height: 300px;
+            }
+            
+            .chat-input {
+                font-size: 16px;
+            }
+            
+            /* 二维码 */
+            .qr-code {
+                width: 180px;
+                height: 180px;
+                font-size: 60px;
+            }
+            
+            /* Footer */
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-lg);
+            }
+        }
+        
+        /* 小屏手机优化 */
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: clamp(28px, 12vw, 42px);
+            }
+            
+            .feature-card {
+                padding: var(--spacing-sm);
+            }
+            
+            .feature-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+            }
+            
+            .modal-content {
+                padding: var(--spacing-sm);
+            }
+            
+            .payment-option {
+                padding: var(--spacing-sm);
+            }
+        }
+        
+        /* 触摸设备优化 */
+        @media (hover: none) and (pointer: coarse) {
+            /* 移除悬停动画，优化触摸体验 */
+            .feature-card:hover {
+                transform: none;
+            }
+            
+            .feature-card:active {
+                transform: scale(0.98);
+            }
+            
+            .btn:hover {
+                transform: none;
+            }
+            
+            .btn:active {
+                transform: scale(0.96);
+            }
+            
+            /* 增大可点击区域 */
+            .nav-links a,
+            .btn,
+            .feature-btn,
+            .payment-tab {
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* 奢华深色滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.3);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        }
+        
+        /* 移动端隐藏滚动条 */
+        @media (max-width: 768px) {
+            ::-webkit-scrollbar {
+                width: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Apple 风格导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-content">
+            <div class="logo">Return To Time</div>
+            <ul class="nav-links">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#features">功能</a></li>
+                <li><a href="#healing">疗愈空间</a></li>
+                <li><a href="#stories">用户故事</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero 主视觉区 -->
+    <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Return To Time</h1>
+            <h2 class="hero-subtitle">重返时光</h2>
+            <p class="hero-description">让时间的痕迹，被温柔修复。以人工智能为媒介，复原影像、疗愈心灵。</p>
+            <div class="cta-buttons">
+                <a href="javascript:void(0)" class="btn btn-primary" onclick="openImageModal()">开始修复</a>
+                <a href="javascript:void(0)" class="btn btn-secondary" onclick="openHealingModal()">探索疗愈空间</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 功能区 -->
+    <section id="features" class="features">
+        <h2 class="section-title">AI影像工作室</h2>
+        <p class="section-subtitle">让影像重生，让回忆永存</p>
+        <div class="features-grid">
+            <div class="feature-card" onclick="openPayment('AI扩图', 29.9)">
+                <span class="feature-category">Image Enhancement</span>
+                <div class="feature-icon">🖼</div>
+                <h3 class="feature-title">AI扩图</h3>
+                <p class="feature-description">基于GAN神经网络，智能分析图像结构，无缝扩展画面边界，让每一张照片都呈现完美构图。</p>
+                <span class="price-badge">￥ 29.9/月</span>
+            </div>
+            <div class="feature-card" onclick="openPayment('老照片修复', 29.9)">
+                <span class="feature-category">Photo Restoration</span>
+                <div class="feature-icon">📷</div>
+                <h3 class="feature-title">老照片修复</h3>
+                <p class="feature-description">采用深度学习算法，智能去噪、去划痕、色彩还原，让珍贵的时光记忆重现生机。</p>
+                <span class="price-badge">￥ 29.9/月</span>
+            </div>
+            <div class="feature-card" onclick="openPayment('AI设计师', 39.9)">
+                <span class="feature-category">Style Transfer</span>
+                <div class="feature-icon">🎨</div>
+                <h3 class="feature-title">AI设计师</h3>
+                <p class="feature-description">融合艺术风格迁移技术，一键将普通照片转化为油画、水彩、超现实等多种艺术风格。</p>
+                <span class="price-badge">￥ 39.9/月</span>
+            </div>
+            <div class="feature-card" onclick="openPayment('AI背景复刻', 34.9)">
+                <span class="feature-category">Scene Reconstruction</span>
+                <div class="feature-icon">🌄</div>
+                <h3 class="feature-title">AI背景复刻</h3>
+                <p class="feature-description">运用语义分割与生成对抗网络，智能重建背景场景，还原记忆中的每一个细节。</p>
+                <span class="price-badge">￥ 34.9/月</span>
+            </div>
+            <div class="feature-card" onclick="openPayment('图片无痕改字', 24.9)">
+                <span class="feature-category">Text Manipulation</span>
+                <div class="feature-icon">✍</div>
+                <h3 class="feature-title">图片无痕改字</h3>
+                <p class="feature-description">OCR识别 + 文本追踪 + 智能填充，以像素级精度替换图片文字，毫无后期痕迹。</p>
+                <span class="price-badge">￥ 24.9/月</span>
+            </div>
+            <div class="feature-card" onclick="openPayment('批量图片精修', 49.9)">
+                <span class="feature-category">Batch Processing</span>
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">批量图片精修</h3>
+                <p class="feature-description">多线程并行处理引擎，支持上千张图片同时修复，为你的图库管理提速。</p>
+                <span class="price-badge">￥ 49.9/月</span>
+            </div>
+            <div class="feature-card" onclick="openPayment('批量图片翻译', 44.9)">
+                <span class="feature-category">AI Translation</span>
+                <div class="feature-icon">🌐</div>
+                <h3 class="feature-title">批量图片翻译</h3>
+                <p class="feature-description">集成多语言OCR识别与神经机器翻译，一键转换图片文字语言，跨越沟通障碍。</p>
+                <span class="price-badge">￥ 44.9/月</span>
+            </div>
+            <div class="feature-card" onclick="openPayment('批量去水印', 39.9)">
+                <span class="feature-category">Watermark Removal</span>
+                <div class="feature-icon">💧</div>
+                <h3 class="feature-title">批量去水印</h3>
+                <p class="feature-description">自动检测水印区域并进行智能修复，让你的图片重获纯净，保留原始美感。</p>
+                <span class="price-badge">￥ 39.9/月</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 心理疗愈空间 -->
+    <section id="healing" class="healing">
+        <div class="healing-content">
+            <div class="healing-text">
+                <h3>心理疗愈空间</h3>
+                <p>倾听你的现在，治愈你的过去。</p>
+                <p style="color: var(--color-text-primary); margin-top: 24px; font-weight: 500;">当AI懂得倾听，你的心，也能重返光亮。在这里，你可以：</p>
+                <ul class="healing-features">
+                    <li>与AI心理顾问进行温柔对话</li>
+                    <li>记录心情日记，获得情绪分析</li>
+                    <li>体验冥想与呼吸引导</li>
+                    <li>获得定制化的疗愈文案</li>
+                </ul>
+                <a href="javascript:void(0)" class="btn btn-primary" onclick="openHealingModal()">开启一次心灵对话</a>
+            </div>
+            <div class="healing-visual">
+                <span style="opacity: 0.3;">🧘</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 用户故事 -->
+    <section id="stories" class="stories">
+        <h2 class="section-title">用户故事</h2>
+        <p class="section-subtitle">从破损到完整，从失落到温柔</p>
+        <div class="stories-container">
+            <div class="story-card">
+                <div class="story-image">📸</div>
+                <div class="story-content">
+                    <p class="story-quote">"我找到了外婆年轻时的照片，虽然已经泛黄破损，但通过AI修复后，仿佛看到了她最美的时光。"</p>
+                    <p class="story-author">— 小雨，25岁</p>
+                </div>
+            </div>
+            <div class="story-card">
+                <div class="story-image">💝</div>
+                <div class="story-content">
+                    <p class="story-quote">"这不仅是一个修复工具，更像是一位温柔的朋友。在压力大的时候，AI心理顾问给了我很多安慰。"</p>
+                    <p class="story-author">— 李明，32岁</p>
+                </div>
+            </div>
+            <div class="story-card">
+                <div class="story-image">✨</div>
+                <div class="story-content">
+                    <p class="story-quote">"把童年的老照片重新变得清晰，那些模糊的记忆也跟着鲜活起来。这种感觉太奇妙了。"</p>
+                    <p class="story-author">— 张薇，29岁</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>关于重返时光</h4>
+                <p>以人工智能为媒介，复原影像、疗愈心灵。让每一张照片都承载着温度，让每一次对话都充满力量。</p>
+            </div>
+            <div class="footer-section">
+                <h4>快速链接</h4>
+                <a href="#features">功能介绍</a>
+                <a href="#healing">疗愈空间</a>
+                <a href="#stories">用户故事</a>
+                <a href="#">隐私政策</a>
+            </div>
+            <div class="footer-section">
+                <h4>技术支持</h4>
+                <a href="#">API文档</a>
+                <a href="#">开发者中心</a>
+                <a href="#">常见问题</a>
+                <a href="#">联系我们</a>
+            </div>
+            <div class="footer-section">
+                <h4>关注我们</h4>
+                <p>在社交媒体上与我们互动</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Return To Time. 让时间慢下来，让回忆重新发光。</p>
+        </div>
+    </footer>
+
+    <!-- 图像修复Modal -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('imageModal')">&times;</span>
+            <h2 class="modal-title" id="modalFeatureTitle">AI影像修复</h2>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📤</div>
+                <p style="font-size: 21px; color: var(--color-text-primary); margin-bottom: 8px; font-weight: 600;">拖拽图片到此处，或点击上传</p>
+                <p style="font-size: 17px; color: var(--color-text-secondary);">支持 JPG、PNG、WEBP 格式</p>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <button class="btn btn-primary" style="margin-top: 24px;" onclick="document.getElementById('fileInput').click()">选择文件</button>
+            </div>
+            <div id="processingInfo" style="display: none;">
+                <p style="color: var(--color-accent); text-align: center; padding: 48px; font-size: 21px;">✨ 图片上传成功！<br><br>AI正在处理中，请稍候...<br><br><small style="color: var(--color-text-secondary); font-size: 14px;">提示：实际应用需要集成佐糖API</small></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 心理疗愈Modal -->
+    <div class="modal" id="healingModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('healingModal')">&times;</span>
+            <h2 class="modal-title">心灵对话空间</h2>
+            <p class="modal-subtitle">在这里，你可以安心地诉说任何情绪，AI会温柔地倾听和陪伴你。</p>
+            <div class="chat-container" id="chatContainer">
+                <div class="chat-message ai">
+                    <p>你好，我是你的AI心理顾问。无论你现在的心情如何，我都在这里倾听。告诉我，你今天过得怎么样？</p>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="在这里输入你的想法..." onkeypress="handleChatKeyPress(event)">
+                <button class="send-btn" onclick="sendMessage()">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 支付Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('paymentModal')">&times;</span>
+            <h2 class="modal-title" id="paymentFeatureName">AI扩图</h2>
+            <p style="color: var(--color-text-secondary); margin-bottom: 32px; font-size: 17px;">选择适合您的订阅套餐，即刻开启智能修夏之旅</p>
+            
+            <div class="payment-options">
+                <div class="payment-option" onclick="selectPlan('monthly')" id="monthlyPlan">
+                    <div class="plan-name">包月套餐</div>
+                    <div class="plan-price">￥<span id="monthlyPrice">29.9</span></div>
+                    <div class="plan-duration">每月</div>
+                </div>
+                <div class="payment-option" onclick="selectPlan('quarterly')" id="quarterlyPlan">
+                    <span class="badge">省 30%</span>
+                    <div class="plan-name">季度套餐</div>
+                    <div class="plan-price">￥<span id="quarterlyPrice">69.9</span></div>
+                    <div class="plan-duration">每三个月</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 24px;" onclick="showQRCode()">立即购买</button>
+
+            <div class="qr-code-container" id="qrCodeContainer">
+                <div class="payment-method-tabs">
+                    <div class="payment-tab active" onclick="switchPaymentMethod('wechat')">
+                        <span style="font-size: 18px; margin-right: 4px;">💵</span> 微信支付
+                    </div>
+                    <div class="payment-tab" onclick="switchPaymentMethod('alipay')">
+                        <span style="font-size: 18px; margin-right: 4px;">💳</span> 支付宝
+                    </div>
+                </div>
+                
+                <div class="qr-code" id="qrCode">
+                    <div style="font-size: 80px;">📱</div>
+                </div>
+                
+                <p class="qr-hint" id="paymentHint">请使用微信扫码支付</p>
+                <p style="font-size: 12px; color: var(--color-text-secondary);">支付成功后将自动开通服务</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // 功能卡片3D交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.feature-card');
+            
+            cards.forEach(card => {
+                // 鼠标移动 - 3D倾斜和光效跟随
+                card.addEventListener('mousemove', function(e) {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 10;
+                    const rotateY = (centerX - x) / 10;
+                    
+                    // 3D倾斜
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-12px) scale(1.02)`;
+                    
+                    // 光效跟随
+                    const percentX = (x / rect.width) * 100;
+                    const percentY = (y / rect.height) * 100;
+                    card.style.setProperty('--mouse-x', `${percentX}%`);
+                    card.style.setProperty('--mouse-y', `${percentY}%`);
+                });
+                
+                // 鼠标离开 - 重置
+                card.addEventListener('mouseleave', function() {
+                    card.style.transform = '';
+                });
+            });
+        });
+
+        // 创建漂浮粒子
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Modal控制函数
+        function openImageModal() {
+            document.getElementById('imageModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openHealingModal() {
+            document.getElementById('healingModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openFeature(featureName) {
+            document.getElementById('modalFeatureTitle').textContent = featureName;
+            openImageModal();
+        }
+
+        // 支付相关函数
+        let selectedPlan = 'monthly';
+        let currentFeature = '';
+        let currentMonthlyPrice = 29.9;
+
+        function openPayment(featureName, monthlyPrice) {
+            currentFeature = featureName;
+            currentMonthlyPrice = monthlyPrice;
+            
+            // 设置功能名称
+            document.getElementById('paymentFeatureName').textContent = featureName;
+            
+            // 计算价格
+            const quarterlyPrice = (monthlyPrice * 3 * 0.7).toFixed(1);
+            document.getElementById('monthlyPrice').textContent = monthlyPrice;
+            document.getElementById('quarterlyPrice').textContent = quarterlyPrice;
+            
+            // 重置选择
+            selectedPlan = 'monthly';
+            document.getElementById('monthlyPlan').classList.add('selected');
+            document.getElementById('quarterlyPlan').classList.remove('selected');
+            document.getElementById('qrCodeContainer').classList.remove('active');
+            
+            // 打开modal
+            document.getElementById('paymentModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function selectPlan(plan) {
+            selectedPlan = plan;
+            const monthlyPlan = document.getElementById('monthlyPlan');
+            const quarterlyPlan = document.getElementById('quarterlyPlan');
+            
+            if (plan === 'monthly') {
+                monthlyPlan.classList.add('selected');
+                quarterlyPlan.classList.remove('selected');
+            } else {
+                quarterlyPlan.classList.add('selected');
+                monthlyPlan.classList.remove('selected');
+            }
+        }
+
+        function showQRCode() {
+            const qrContainer = document.getElementById('qrCodeContainer');
+            qrContainer.classList.add('active');
+            
+            // 滚动到二维码区域
+            setTimeout(() => {
+                qrContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function switchPaymentMethod(method) {
+            const tabs = document.querySelectorAll('.payment-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.closest('.payment-tab').classList.add('active');
+            
+            const hint = document.getElementById('paymentHint');
+            if (method === 'wechat') {
+                hint.textContent = '请使用微信扫码支付';
+            } else {
+                hint.textContent = '请使用支付宝扫码支付';
+            }
+        }
+
+        // 文件上传处理
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const processingInfo = document.getElementById('processingInfo');
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                uploadArea.style.display = 'none';
+                processingInfo.style.display = 'block';
+            }
+        });
+
+        // 拖拽上传
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--color-gold)';
+            uploadArea.style.background = 'rgba(212, 175, 55, 0.1)';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '';
+            uploadArea.style.background = '';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '';
+            uploadArea.style.background = '';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // 聊天功能
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const container = document.getElementById('chatContainer');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // 添加用户消息
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            userMsg.innerHTML = `<p>${message}</p>`;
+            container.appendChild(userMsg);
+            
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+            
+            // 模拟AI回复
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'chat-message ai';
+                const responses = [
+                    '谢谢你与我分享。我能感受到你的情绪，这很正常。你愿意多说一些吗？',
+                    '听起来这对你很重要。我在认真倾听，请继续说。',
+                    '我理解你的感受。记住，每一种情绪都值得被温柔对待。',
+                    '你做得很好。愿意和我分享这些，本身就是一种勇敢。',
+                    '让我们一起面对这些。你不是一个人，我会一直在这里陪伴你。'
+                ];
+                aiMsg.innerHTML = `<p>${responses[Math.floor(Math.random() * responses.length)]}<br><br><small style="opacity: 0.7;">提示：实际应用需要集成Gemini API</small></p>`;
+                container.appendChild(aiMsg);
+                container.scrollTop = container.scrollHeight;
+            }, 1000);
+        }
+
+        // 点击Modal外部关闭
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+
+    <!-- API集成 -->
+    <script src="api-integration.js"></script>
+    
+    <!-- 后端集成脚本 -->
+    <script>
+        // API配置
+        const API_BASE_URL = 'http://localhost:5000';
+        let currentChatSessionId = null;
+
+        // 初始化聊天会话（打开Modal时调用）
+        async function initChatIfNeeded() {
+            if (!currentChatSessionId) {
+                try {
+                    const session = await ReturnToTimeAPI.createChatSession();
+                    currentChatSessionId = session.session_id;
+                    
+                    // 加载初始消息
+                    const history = await ReturnToTimeAPI.getChatHistory(currentChatSessionId);
+                    const container = document.getElementById('chatContainer');
+                    container.innerHTML = '';
+                    
+                    history.messages.forEach(msg => {
+                        const msgDiv = document.createElement('div');
+                        msgDiv.className = `chat-message ${msg.role}`;
+                        msgDiv.innerHTML = `<p>${msg.content}</p>`;
+                        container.appendChild(msgDiv);
+                    });
+                } catch (error) {
+                    console.error('初始化聊天失败:', error);
+                    // 降级到模拟模式
+                    console.log('使用模拟模式');
+                }
+            }
+        }
+
+        // 重写sendMessage函数，调用后端API
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const container = document.getElementById('chatContainer');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // 添加用户消息
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            userMsg.innerHTML = `<p>${message}</p>`;
+            container.appendChild(userMsg);
+            
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+            
+            // 调用后端API
+            try {
+                if (!currentChatSessionId) {
+                    await initChatIfNeeded();
+                }
+                
+                if (currentChatSessionId) {
+                    const response = await ReturnToTimeAPI.sendChatMessage(currentChatSessionId, message);
+                    
+                    // 添加AI响应
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'chat-message ai';
+                    aiMsg.innerHTML = `<p>${response.ai_response}</p>`;
+                    container.appendChild(aiMsg);
+                    container.scrollTop = container.scrollHeight;
+                } else {
+                    throw new Error('无法创建会话');
+                }
+            } catch (error) {
+                console.error('API调用失败:', error);
+                
+                // 降级到模拟响应
+                setTimeout(() => {
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'chat-message ai';
+                    const responses = [
+                        '谢谢你与我分享。我能感受到你的情绪，这很正常。你愿意多说一些吗？',
+                        '听起来这对你很重要。我在认真倾听，请继续说。',
+                        '我理解你的感受。记住，每一种情绪都值得被温柔对待。'
+                    ];
+                    aiMsg.innerHTML = `<p>${responses[Math.floor(Math.random() * responses.length)]}</p>`;
+                    container.appendChild(aiMsg);
+                    container.scrollTop = container.scrollHeight;
+                }, 800);
+            }
+        }
+
+        // 重写openHealingModal函数
+        const originalOpenHealingModal = openHealingModal;
+        function openHealingModal() {
+            originalOpenHealingModal();
+            initChatIfNeeded();
+        }
+
+        // 加载用户故事
+        async function loadStories() {
+            try {
+                await ReturnToTimeAPI.loadUserStories();
+            } catch (error) {
+                console.error('加载故事失败:', error);
+            }
+        }
+
+        // 页面加载时自动加载故事
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStories();
+        });
+    </script>
+</body>
+</html>
